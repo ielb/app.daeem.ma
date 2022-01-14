@@ -1,0 +1,26 @@
+[31-Aug-2021 18:36:25 America/New_York] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 7.4.0". You are running 7.2.34. in /home/boffvujp/app.boffola.xyz/vendor/composer/platform_check.php on line 24
+[31-Aug-2021 18:38:57 America/New_York] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 7.4.0". You are running 7.2.34. in /home/boffvujp/app.boffola.xyz/vendor/composer/platform_check.php on line 24
+[07-Sep-2021 14:55:34 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\ClientController::show() in /home/boffvujp/app.boffola.xyz/app/Http/Controllers/ClientController.php on line 69
+[13-Sep-2021 16:24:39 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\ClientController::show() in /home/boffvujp/app.boffola.xyz/app/Http/Controllers/ClientController.php on line 90
+[16-Sep-2021 11:39:49 UTC] PHP Fatal error:  Cannot redeclare App\Models\Order::user() in /home/boffvujp/app.boffola.xyz/app/Models/Order.php on line 60
+[16-Sep-2021 11:58:44 UTC] PHP Fatal error:  Cannot redeclare App\Models\Order::user() in /home/boffvujp/app.boffola.xyz/app/Models/Order.php on line 61
+[16-Sep-2021 11:59:31 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::orders() in /home/boffvujp/app.boffola.xyz/app/Models/User.php on line 56
+[16-Sep-2021 11:59:32 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::orders() in /home/boffvujp/app.boffola.xyz/app/Models/User.php on line 56
+[16-Sep-2021 11:59:40 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::orders() in /home/boffvujp/app.boffola.xyz/app/Models/User.php on line 56
+[16-Sep-2021 11:59:43 UTC] PHP Fatal error:  Cannot redeclare App\Models\User::orders() in /home/boffvujp/app.boffola.xyz/app/Models/User.php on line 56
+[16-Sep-2021 16:04:56 UTC] PHP Fatal error:  Cannot redeclare App\Models\Order::orderhasstatus() in /home/boffvujp/app.boffola.xyz/app/Models/Order.php on line 67
+[21-Sep-2021 17:17:39 UTC] PHP Fatal error:  Cannot use App\Models\Client as Client because the name is already in use in /home/daeerqic/app.daeem.ma/app/Http/Controllers/HomeController.php on line 8
+[26-Sep-2021 12:07:20 UTC] Some message here.
+[26-Sep-2021 12:07:31 UTC] Some message here.
+[26-Sep-2021 12:07:38 UTC] Some message here.
+[26-Sep-2021 12:07:41 UTC] Some message here.
+[26-Sep-2021 12:08:08 UTC] Some message here.
+[26-Sep-2021 12:11:18 UTC] Some message here.
+[20-Oct-2021 15:52:07 UTC] PHP Fatal error:  Cannot use [] for reading in /home/daeerqic/app.daeem.ma/app/Http/Controllers/UserController.php on line 183
+[20-Oct-2021 15:52:08 UTC] PHP Fatal error:  Cannot use [] for reading in /home/daeerqic/app.daeem.ma/app/Http/Controllers/UserController.php on line 183
+[20-Oct-2021 15:52:09 UTC] PHP Fatal error:  Cannot use [] for reading in /home/daeerqic/app.daeem.ma/app/Http/Controllers/UserController.php on line 183
+[20-Oct-2021 15:52:36 UTC] PHP Fatal error:  Cannot use [] for reading in /home/daeerqic/app.daeem.ma/app/Http/Controllers/UserController.php on line 183
+[20-Oct-2021 15:52:37 UTC] PHP Fatal error:  Cannot use [] for reading in /home/daeerqic/app.daeem.ma/app/Http/Controllers/UserController.php on line 183
+[20-Oct-2021 15:52:38 UTC] PHP Fatal error:  Cannot use [] for reading in /home/daeerqic/app.daeem.ma/app/Http/Controllers/UserController.php on line 183
+[21-Oct-2021 12:32:36 UTC] PHP Fatal error:  Cannot use Carbon\Carbon as Carbon because the name is already in use in /home/daeerqic/app.daeem.ma/app/Http/Controllers/HomeController.php on line 13
+[21-Oct-2021 12:32:36 UTC] PHP Fatal error:  Cannot use Carbon\Carbon as Carbon because the name is already in use in /home/daeerqic/app.daeem.ma/app/Http/Controllers/HomeController.php on line 13
