@@ -30,24 +30,24 @@ class StoreController extends Controller
 
         $stores = Store::latest()->get();
 
-        return view('stores.index',['stores' => $stores]);
+        return view('stores.index', ['stores' => $stores]);
     }
 
     public function stores_select2(Request $request)
     {
         $stores = [];
-//        if($request->has('q')){
-//            $search = $request->q;
-//            $Stores =Store::select("id", "name")
-//                ->where('name', 'LIKE', "%$search%")
-//                ->where('status' ,'=', 1)
-//                ->latest()
-//                ->get();
-//        }
-//        else {
-        $stores =Store::select("id", "name")->where('status' ,'=', 1)->latest()
+        //        if($request->has('q')){
+        //            $search = $request->q;
+        //            $Stores =Store::select("id", "name")
+        //                ->where('name', 'LIKE', "%$search%")
+        //                ->where('status' ,'=', 1)
+        //                ->latest()
+        //                ->get();
+        //        }
+        //        else {
+        $stores = Store::select("id", "name")->where('status', '=', 1)->latest()
             ->get();
-//        }
+        //        }
         return response()->json($stores);
     }
 
@@ -61,7 +61,7 @@ class StoreController extends Controller
 
         $cities = City::all();
         $store_types = StoreType::all();
-        return view('stores.create',['cities' => $cities , 'store_types' => $store_types]);
+        return view('stores.create', ['cities' => $cities, 'store_types' => $store_types]);
     }
 
     /**
@@ -84,14 +84,14 @@ class StoreController extends Controller
         $use_fake_rating = $request->is_faked_rating == null ? 0 : 1;
 
 
-        if(isset($request->store_logo)){
-            $store_logo_name = rand().'_'.time().'.'.$request->store_logo->extension();
-        }else{
+        if (isset($request->store_logo)) {
+            $store_logo_name = rand() . '_' . time() . '.' . $request->store_logo->extension();
+        } else {
             $store_logo_name = "market_avatar.jpeg";
         }
-        if(isset($request->store_cover)){
-            $store_cover_name = rand().'_'.time().'.'.$request->store_cover->extension();
-        }else{
+        if (isset($request->store_cover)) {
+            $store_cover_name = rand() . '_' . time() . '.' . $request->store_cover->extension();
+        } else {
             $store_cover_name = "cover_avatar.jpeg";
         }
 
@@ -108,6 +108,7 @@ class StoreController extends Controller
         $store_email = $request->store_email;
         $store_password = $request->store_password;
 
+
         $result = Store::create([
             'name' => trim($store_name),
             'logo' => trim($store_logo_name),
@@ -121,37 +122,26 @@ class StoreController extends Controller
             'lng' => trim($store_lng),
             'use_fake_rating' =>  $use_fake_rating,
             'city_id' => $store_city,
+            'user_id' => auth()->user()->id,
             'description' => $store_description,
             'commission' => $store_commission,
             'store_type_id' => $store_type,
             'recovery_token' => Str::random(60),
             'status' => 1
         ]);
+        if ($result) {
 
-        if($result){
-            User::create([
-                'name' => trim($store_name),
-                'email' => trim($store_email),
-                'password' =>  Hash::make($store_password),
-                'phone' => trim($store_phone),
-                'role' => 'owner',
-                'remember_token' => Str::random(60),
-                'code' => '',
-                'gender' => '',
-                'status' => 1
-
-            ]);
-            if(isset($request->store_logo)){
-                $request->store_logo->move(public_path('images/stores/logos'),$store_logo_name);
+            if (isset($request->store_logo)) {
+                $request->store_logo->move(public_path('images/stores/logos'), $store_logo_name);
             }
-            if(isset($request->store_cover)){
-                $request->store_cover->move(public_path('images/stores/covers'),$store_cover_name);
+            if (isset($request->store_cover)) {
+                $request->store_cover->move(public_path('images/stores/covers'), $store_cover_name);
             }
         }
 
 
-        return redirect()->route('stores')->withStatus(__('Store successfully created.'));
 
+        return redirect()->route('stores')->withStatus(__('Store successfully created.'));
     }
 
     /**
@@ -164,12 +154,12 @@ class StoreController extends Controller
     public function storeslocations()
     {
         //TODO - Method for admin onlt
-        if (! auth()->user()->role == "admin") {
+        if (!auth()->user()->role == "admin") {
             abort(403);
         }
 
         $toRespond = [
-            'stores'=> Store::where('status', 1)->get(),
+            'stores' => Store::where('status', 1)->get(),
         ];
 
         return response()->json($toRespond);
@@ -179,16 +169,16 @@ class StoreController extends Controller
     {
 
         $total_orders =  $store->orders()->count();
-        $finished_orders =  $store->orders()->where('status_id' ,'=', 5)->count();
-        $processed_orders =  $store->orders()->whereIn('status_id',[2,3,4,8])->count();
+        $finished_orders =  $store->orders()->where('status_id', '=', 5)->count();
+        $processed_orders =  $store->orders()->whereIn('status_id', [2, 3, 4, 8])->count();
 
 
-        $orders = Order::where('store_id',$store->id)->get();
+        $orders = Order::where('store_id', $store->id)->get();
 
 
         $days = array();
         $hours = array();
-        if($store->hours()->count()){
+        if ($store->hours()->count()) {
 
             $hours = $store->hours;
         }
@@ -204,8 +194,8 @@ class StoreController extends Controller
         //Generate days columns
         $hoursRange = ['id'];
         for ($i = 0; $i < 7; $i++) {
-            $from = $i.'_from';
-            $to = $i.'_to';
+            $from = $i . '_from';
+            $to = $i . '_to';
 
             array_push($hoursRange, $from);
             array_push($hoursRange, $to);
@@ -213,18 +203,20 @@ class StoreController extends Controller
 
         $cities = City::all();
         $store_types = StoreType::all();
-        return view('stores.show',
+        return view(
+            'stores.show',
             [
-                'cities' => $cities ,
-                'store_types' => $store_types ,
-                'store' => $store ,
-                'orders' => $orders ,
-                'days'=> $days ,
+                'cities' => $cities,
+                'store_types' => $store_types,
+                'store' => $store,
+                'orders' => $orders,
+                'days' => $days,
                 'hours' => $hours,
                 'total_orders' => $total_orders,
                 'finished_orders' => $finished_orders,
                 'processed_orders' => $processed_orders
-            ]);
+            ]
+        );
     }
 
     /**
@@ -236,7 +228,7 @@ class StoreController extends Controller
     public function edit(Store $store)
     {
         $cities = City::all();
-        return view('stores.edit',['cities' => $cities , 'store' => $store]);
+        return view('stores.edit', ['cities' => $cities, 'store' => $store]);
     }
 
     /**
@@ -258,14 +250,14 @@ class StoreController extends Controller
 
         $use_fake_rating = $request->is_faked_rating == null ? 0 : 1;
 
-        if(isset($request->store_logo)){
-            $store_logo_name = rand().'_'.time().'.'.$request->store_logo->extension();
-        }else{
+        if (isset($request->store_logo)) {
+            $store_logo_name = rand() . '_' . time() . '.' . $request->store_logo->extension();
+        } else {
             $store_logo_name = $store->logo;
         }
-        if(isset($request->store_cover)){
-            $store_cover_name = rand().'_'.time().'.'.$request->store_cover->extension();
-        }else{
+        if (isset($request->store_cover)) {
+            $store_cover_name = rand() . '_' . time() . '.' . $request->store_cover->extension();
+        } else {
             $store_cover_name = $store->cover;
         }
 
@@ -281,9 +273,9 @@ class StoreController extends Controller
         $store_description = $request->store_description;
         $store_email = $request->store_email;
         $store_password = $request->store_password;
-        if($store_password == ''){
+        if ($store_password == '') {
             $store_password = md5(trim($request->store_password));
-        }else{
+        } else {
             $store_password = $store->password;
         }
 
@@ -307,17 +299,16 @@ class StoreController extends Controller
             'status' => 1
         ]);
 
-        if($result){
-            if(isset($request->store_logo)){
-                $request->store_logo->move(public_path('images/stores/logos'),$store_logo_name);
+        if ($result) {
+            if (isset($request->store_logo)) {
+                $request->store_logo->move(public_path('images/stores/logos'), $store_logo_name);
             }
-            if(isset($request->store_cover)){
-                $request->store_cover->move(public_path('images/stores/covers'),$store_cover_name);
+            if (isset($request->store_cover)) {
+                $request->store_cover->move(public_path('images/stores/covers'), $store_cover_name);
             }
         }
 
         return redirect()->route('stores')->withStatus(__('Store successfully updated.'));
-
     }
 
     /**
@@ -344,7 +335,6 @@ class StoreController extends Controller
         $store->update();
 
         return redirect()->route('stores')->withStatus(__('Store successfully activated.'));
-
     }
 
     /**
@@ -360,86 +350,81 @@ class StoreController extends Controller
         $store->update();
 
         return redirect()->route('stores')->withStatus(__('Store successfully deactivated.'));
-
     }
 
     public function workingHours(Store $store, Request $request)
     {
 
 
-        $hours = Hour::where(['store_id' => $store->id ])->first();
-        $from_0 = $request->from_0 != null ? $request->from_0 : '00:00' ;
-        $to_0   = $request->to_0 != null ? $request->to_0 : '00:00' ;
-        $from_1 = $request->from_1 != null ? $request->from_1 : '00:00' ;
-        $to_1   = $request->to_1 != null ? $request->to_1 : '00:00' ;
-        $from_2 = $request->from_2 != null ? $request->from_2 : '00:00' ;
-        $to_2   = $request->to_2 != null ? $request->to_2 : '00:00' ;
-        $from_3 = $request->from_3 != null ? $request->from_3 : '00:00' ;
-        $to_3   = $request->to_3 != null ? $request->to_3 : '00:00' ;
-        $from_4 = $request->from_4 != null ? $request->from_4 : '00:00' ;
-        $to_4   = $request->to_4 != null ? $request->to_4 : '' ;
-        $from_5 = $request->from_5 != null ? $request->from_5 : '00:00' ;
-        $to_5   = $request->to_5 != null ? $request->to_5 : '00:00' ;
-        $from_6 = $request->from_6 != null ? $request->from_6 : '00:00' ;
-        $to_6   = $request->to_6 != null ? $request->to_6 : '00:00' ;
+        $hours = Hour::where(['store_id' => $store->id])->first();
+        $from_0 = $request->from_0 != null ? $request->from_0 : '00:00';
+        $to_0   = $request->to_0 != null ? $request->to_0 : '00:00';
+        $from_1 = $request->from_1 != null ? $request->from_1 : '00:00';
+        $to_1   = $request->to_1 != null ? $request->to_1 : '00:00';
+        $from_2 = $request->from_2 != null ? $request->from_2 : '00:00';
+        $to_2   = $request->to_2 != null ? $request->to_2 : '00:00';
+        $from_3 = $request->from_3 != null ? $request->from_3 : '00:00';
+        $to_3   = $request->to_3 != null ? $request->to_3 : '00:00';
+        $from_4 = $request->from_4 != null ? $request->from_4 : '00:00';
+        $to_4   = $request->to_4 != null ? $request->to_4 : '';
+        $from_5 = $request->from_5 != null ? $request->from_5 : '00:00';
+        $to_5   = $request->to_5 != null ? $request->to_5 : '00:00';
+        $from_6 = $request->from_6 != null ? $request->from_6 : '00:00';
+        $to_6   = $request->to_6 != null ? $request->to_6 : '00:00';
         $days_off = array();
-        for($i=0;$i<7;$i++){
+        for ($i = 0; $i < 7; $i++) {
 
-            if(!in_array($i,$request->days)){
-                $days_off[] = $i ;
+            if (!in_array($i, $request->days)) {
+                $days_off[] = $i;
             }
-
         }
 
-        $days_off_str = implode(',',$days_off);
+        $days_off_str = implode(',', $days_off);
 
-        if(!$hours){
+        if (!$hours) {
 
             Hour::create([
 
                 '0_from' => $from_0,
-                '0_to' =>$to_0,
-                '1_from' =>$from_1,
-                '1_to' =>$to_1,
-                '2_from' =>$from_2,
-                '2_to' =>$to_2,
-                '3_from' =>$from_3,
-                '3_to' =>$to_3,
-                '4_from' =>$from_4,
-                '4_to' =>$to_4,
-                '5_from' =>$from_5,
-                '5_to' =>$to_5,
-                '6_from' =>$from_6,
-                '6_to' =>$to_6,
-                'day_off' =>$days_off_str,
-                'store_id' =>$store->id,
+                '0_to' => $to_0,
+                '1_from' => $from_1,
+                '1_to' => $to_1,
+                '2_from' => $from_2,
+                '2_to' => $to_2,
+                '3_from' => $from_3,
+                '3_to' => $to_3,
+                '4_from' => $from_4,
+                '4_to' => $to_4,
+                '5_from' => $from_5,
+                '5_to' => $to_5,
+                '6_from' => $from_6,
+                '6_to' => $to_6,
+                'day_off' => $days_off_str,
+                'store_id' => $store->id,
             ]);
-
-
-        }else{
+        } else {
 
             $hours->update([
 
                 '0_from' => $from_0,
-                '0_to' =>$to_0,
-                '1_from' =>$from_1,
-                '1_to' =>$to_1,
-                '2_from' =>$from_2,
-                '2_to' =>$to_2,
-                '3_from' =>$from_3,
-                '3_to' =>$to_3,
-                '4_from' =>$from_4,
-                '4_to' =>$to_4,
-                '5_from' =>$from_5,
-                '5_to' =>$to_5,
-                '6_from' =>$from_6,
-                '6_to' =>$to_6,
-                'day_off' =>$days_off_str,
+                '0_to' => $to_0,
+                '1_from' => $from_1,
+                '1_to' => $to_1,
+                '2_from' => $from_2,
+                '2_to' => $to_2,
+                '3_from' => $from_3,
+                '3_to' => $to_3,
+                '4_from' => $from_4,
+                '4_to' => $to_4,
+                '5_from' => $from_5,
+                '5_to' => $to_5,
+                '6_from' => $from_6,
+                '6_to' => $to_6,
+                'day_off' => $days_off_str,
             ]);
         }
 
         return redirect()->back()->withStatus(__('Working hours successfully updated!'));
-
     }
 
     //get location
@@ -468,5 +453,4 @@ class StoreController extends Controller
             'msg' => '',
         ]);
     }
-
 }

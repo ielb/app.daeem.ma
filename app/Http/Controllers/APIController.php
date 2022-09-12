@@ -74,21 +74,21 @@ class APIController extends Controller
 
     public function api_get_all_stores_nearby_by_type(Request $request)
     {
-        
+
         $stores = array();
         $longitude_x = $request->lng;  // x-coordinate of the point to test
         $latitude_y = $request->lat;    // y-coordinate of the point to test
         $store_type_id = $request->store_type;
-        $stores_arr = Store::where('status', 1)->where('store_type_id',$store_type_id)->get();
+        $stores_arr = Store::where('status', 1)->where('store_type_id', $store_type_id)->get();
         // y-coordinate of the point to test
-        foreach ($stores_arr as $store){
+        foreach ($stores_arr as $store) {
 
             $vertices_x = array();    // x-coordinates of the vertices of the polygon
             $vertices_y = array(); // y-coordinates of the vertices of the polygon
-            $radius = json_decode($store->radius,true);
+            $radius = json_decode($store->radius, true);
 
-            if($radius != NULL){
-                foreach($radius as $rd){
+            if ($radius != NULL) {
+                foreach ($radius as $rd) {
                     $vertices_y[] = $rd['lat'];
                     $vertices_x[] = $rd['lng'];
                 }
@@ -97,11 +97,9 @@ class APIController extends Controller
                     $stores[] = $store;
                 }
             }
-
         }
 
         return json_encode($stores);
-
     }
     public function api_get_all_stores_nearby(Request $request)
     {
@@ -111,14 +109,14 @@ class APIController extends Controller
         $stores = array();
         $longitude_x = $request->lng;  // x-coordinate of the point to test
         $latitude_y = $request->lat;    // y-coordinate of the point to test
-        foreach ($stores_arr as $store){
+        foreach ($stores_arr as $store) {
 
             $vertices_x = array();    // x-coordinates of the vertices of the polygon
             $vertices_y = array(); // y-coordinates of the vertices of the polygon
-            $radius = json_decode($store->radius,true);
-         
-            if($radius != NULL){
-                foreach($radius as $rd){
+            $radius = json_decode($store->radius, true);
+
+            if ($radius != NULL) {
+                foreach ($radius as $rd) {
                     $vertices_y[] = $rd['lat'];
                     $vertices_x[] = $rd['lng'];
                 }
@@ -127,11 +125,9 @@ class APIController extends Controller
                     $stores[] = $store;
                 }
             }
-
         }
 
         return $stores;
-
     }
 
     public function is_in_polygon($points_polygon, $vertices_x, $vertices_y, $longitude_x, $latitude_y)
@@ -162,7 +158,9 @@ class APIController extends Controller
         $old = env($key);
         if (file_exists($path)) {
             file_put_contents($path, str_replace(
-                "$key=" . $old, "$key=" . $value, file_get_contents($path)
+                "$key=" . $old,
+                "$key=" . $value,
+                file_get_contents($path)
             ));
         }
     }
@@ -215,7 +213,6 @@ class APIController extends Controller
             $result = $rating->update([
                 'rating' => $rating_value
             ]);
-
         } else {
             $result = Rating::create([
                 'client_id' => $client_id,
@@ -229,8 +226,6 @@ class APIController extends Controller
         }
 
         return ['status' => 'error'];
-
-
     }
 
     public function api_get_store_rating($id)
@@ -276,8 +271,8 @@ class APIController extends Controller
         $subcategory = Subcategory::find($id);
 
         $products = $subcategory->products;
-        foreach ($products as $product){
-            $variants = Variant::where('product_id',$product->id)->get();
+        foreach ($products as $product) {
+            $variants = Variant::where('product_id', $product->id)->get();
             $product->variants = $variants;
         }
 
@@ -286,7 +281,6 @@ class APIController extends Controller
         } else {
             return ['status' => 'error'];
         }
-
     }
 
 
@@ -305,9 +299,9 @@ class APIController extends Controller
     {
 
         $product = Product::find($id);
-        $variants = Variant::where('product_id',$product->id)->get();
+        $variants = Variant::where('product_id', $product->id)->get();
         if ($product) {
-            return ['status' => 'success', 'data' =>['product' => $product , 'variants' => $variants]];
+            return ['status' => 'success', 'data' => ['product' => $product, 'variants' => $variants]];
         } else {
             return ['status' => 'error'];
         }
@@ -329,11 +323,10 @@ class APIController extends Controller
         $address = null;
         if ($client) {
             $address = Address::whereClientId($client->id)->first();
-            return ['status' => 'success', 'data' => ['client' => $client , 'address' => $address]];
+            return ['status' => 'success', 'data' => ['client' => $client, 'address' => $address]];
         } else {
             return ['status' => 'error'];
         }
-
     }
 
     public function api_register(Request $request)
@@ -359,31 +352,28 @@ class APIController extends Controller
         ]);
 
         if ($client) {
-            $mailData = [
-                'title' => ' Hi, ' . $client->name . ' ',
-                'url' => ' ' . env("APP_URL") . '/confirmation/' . $client->remember_token . ' '
-            ];
+            //     $mailData = [
+            //         'title' => ' Hi, ' . $client->name . ' ',
+            //         'url' => ' ' . env("APP_URL") . '/confirmation/' . $client->remember_token . ' '
+            //     ];
 
-            Mail::to($email)->send(new SendMail($mailData, 'confirmation'));
-
-
-//            Mail::send([], [], function ($message) use ($email, $html) {
-//                $message->to($email)
-//                    ->subject('Confirmation Mail | ' . env('APP_NAME'))
-//                    ->setBody($html, 'text/html'); // for HTML rich messages
-//            });
+            //     Mail::to($email)->send(new SendMail($mailData, 'confirmation'));
 
 
-            if (Mail::failures()) {
-                return ['status' => 'warning', 'message' => 'Send Mail failed '];
-            } else {
-                return ['status' => 'success'];
-            }
+            //    Mail::send([], [], function ($message) use ($email, $html) {
+            //        $message->to($email)
+            //            ->subject('Confirmation Mail | ' . env('APP_NAME'))
+            //            ->setBody($html, 'text/html'); // for HTML rich messages
+            //    });
 
+
+            //     if (Mail::failures()) {
+            //         return ['status' => 'warning', 'message' => 'Send Mail failed '];
+            //     } else {
+            return ['status' => 'success'];
         } else {
             return ['status' => 'error'];
         }
-
     }
 
     public function api_client_email_confirmation($token)
@@ -402,7 +392,6 @@ class APIController extends Controller
             } else {
                 abort(432);
             }
-
         } else {
             abort(404);
         }
@@ -419,11 +408,9 @@ class APIController extends Controller
         if (count($client)) {
             // login
             return ['status' => 'success', 'data' => ['client' => $client, 'address' =>  $address]];
-
         } else {
             return ['status' => 'error'];
         }
-
     }
 
     public function api_login_by_facebook(Request $request)
@@ -436,11 +423,9 @@ class APIController extends Controller
         if (count($client)) {
             // login
             return ['status' => 'success', 'data' => $client];
-
         } else {
             return ['status' => 'error'];
         }
-
     }
 
     public function api_login_by_social(Request $request)
@@ -450,22 +435,20 @@ class APIController extends Controller
         $uid = trim($request->uid);
 
         if ($provider == 'google') {
-//            $client = Client::where([['email', $email], ['go_id', $uid], ['status', 1]])->get();
+            //            $client = Client::where([['email', $email], ['go_id', $uid], ['status', 1]])->get();
             $client = Client::whereEmail($email)->whereGoId($uid)->whereStatus(1)->first();
-
         } else {
             $client = Client::whereEmail($email)->whereFbId($uid)->whereStatus(1)->first();
 
-//            $client = Client::where([['email', $email], ['fb_id', $uid], ['status', 1]])->get();
+            //            $client = Client::where([['email', $email], ['fb_id', $uid], ['status', 1]])->get();
         }
         $address = null;
         if ($client) {
             $address = Address::whereClientId($client->id)->first();
-            return ['status' => 'success', 'data' => ['client' => $client , 'address' => $address]];
+            return ['status' => 'success', 'data' => ['client' => $client, 'address' => $address]];
         } else {
             return ['status' => 'error'];
         }
-
     }
 
     public function api_register_by_social(Request $request)
@@ -478,7 +461,6 @@ class APIController extends Controller
 
         if ($provider == 'google') {
             $client = Client::where([['email', $email], ['go_id', $uid], ['status', 1]])->get();
-
         } else {
             $client = Client::where([['email', $email], ['fb_id', $uid], ['status', 1]])->get();
         }
@@ -487,7 +469,6 @@ class APIController extends Controller
 
             // login
             return ['status' => 'success', 'data' => $client];
-
         } else {
 
             if ($provider == 'google') {
@@ -517,7 +498,6 @@ class APIController extends Controller
                 return ['status' => 'error'];
             }
         }
-
     }
 
     public function api_register_by_google(Request $request)
@@ -533,7 +513,6 @@ class APIController extends Controller
 
             // login
             return ['status' => 'success', 'data' => $client];
-
         } else {
 
             // register and login
@@ -551,7 +530,6 @@ class APIController extends Controller
                 return ['status' => 'error'];
             }
         }
-
     }
 
     public function api_register_by_facebook(Request $request)
@@ -567,7 +545,6 @@ class APIController extends Controller
 
             // login
             return ['status' => 'success', 'data' => $client];
-
         } else {
 
             // register and login
@@ -585,7 +562,6 @@ class APIController extends Controller
                 return ['status' => 'error', 'data' => null];
             }
         }
-
     }
 
     public function api_reset_client_password_request(Request $request)
@@ -601,16 +577,16 @@ class APIController extends Controller
             $digits = 5;
             $code = rand(pow(10, $digits - 1), pow(10, $digits) - 1);
 
-//            $html = '<html>
-//                    <head>
-//                        <meta name="viewport" content="width=device-width" />
-//                        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-//                        <title>' . env('APP_NAME') . '</title>
-//                    </head>
-//                    <body class="">
-//                          reset password code is <b>' . $code . '</b>
-//                    </body>
-//                    </html>';
+            //            $html = '<html>
+            //                    <head>
+            //                        <meta name="viewport" content="width=device-width" />
+            //                        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            //                        <title>' . env('APP_NAME') . '</title>
+            //                    </head>
+            //                    <body class="">
+            //                          reset password code is <b>' . $code . '</b>
+            //                    </body>
+            //                    </html>';
 
             $mailData = [
                 'title' => ' Confirmation Code ',
@@ -620,11 +596,11 @@ class APIController extends Controller
             Mail::to($email)->send(new SendMail($mailData, 'reset'));
 
 
-//            Mail::send([], [], function ($message) use ($email, $html) {
-//                $message->to($email)
-//                    ->subject('Reset Password | ' . env('APP_NAME'))
-//                    ->setBody($html, 'text/html'); // for HTML rich messages
-//            });
+            //            Mail::send([], [], function ($message) use ($email, $html) {
+            //                $message->to($email)
+            //                    ->subject('Reset Password | ' . env('APP_NAME'))
+            //                    ->setBody($html, 'text/html'); // for HTML rich messages
+            //            });
 
 
             if (Mail::failures()) {
@@ -635,12 +611,9 @@ class APIController extends Controller
                     'confirmation_code' => $code
                 ]];
             }
-
-
         } else {
             return ['status' => 'error', 'data' => null];
         }
-
     }
 
     public function api_reset_client_password(Request $request)
@@ -662,11 +635,9 @@ class APIController extends Controller
             } else {
                 return ['status' => 'error'];
             }
-
         } else {
             return ['status' => 'error'];
         }
-
     }
 
     public function api_edit_client_info(Request $request)
@@ -698,7 +669,6 @@ class APIController extends Controller
                     'email' => $email,
                     'email_verified_at' => null
                 ]);
-
             } else {
                 // reset password
                 $result = $client->update([
@@ -726,15 +696,12 @@ class APIController extends Controller
                 }
 
                 return ['status' => 'success'];
-
             } else {
                 return ['status' => 'error'];
             }
-
         } else {
             return ['status' => 'error'];
         }
-
     }
 
     public function api_get_client_by_id($id)
@@ -742,7 +709,7 @@ class APIController extends Controller
 
         $client = Client::find($id);
         if ($client) {
-            return ['status' => 'success', 'data' => [ 'client' => $client  , 'address' => $client->address]];
+            return ['status' => 'success', 'data' => ['client' => $client, 'address' => $client->address]];
         } else {
             return ['status' => 'error'];
         }
@@ -809,7 +776,7 @@ class APIController extends Controller
 
     public function api_insert_order(Request $request)
     {
-        $data = json_decode($request->data,true);
+        $data = json_decode($request->data, true);
 
         $code = Date('His');
 
@@ -819,7 +786,7 @@ class APIController extends Controller
         $address_id = $data['address_id'];
         $order_price = $data['order_price'];
         $delivery_price = $data['delivery_price'];
-        $use_coupon = $data['use_coupon'] ;
+        $use_coupon = $data['use_coupon'];
         $price_after_coupon = $data['price_after_coupon'];
         $discount_price = $data['discount_price'];
         $use_delivery_time = $data['use_delivery_time'];
@@ -846,9 +813,9 @@ class APIController extends Controller
         ]);
 
 
-//        $products = array_filter(explode(',', $products_str));
-//        $qte = array_filter(explode(',', $qte_str));
-//        $variants = array_filter(explode(',', $request->variants));
+        //        $products = array_filter(explode(',', $products_str));
+        //        $qte = array_filter(explode(',', $qte_str));
+        //        $variants = array_filter(explode(',', $request->variants));
 
 
         $data = [];
@@ -871,7 +838,6 @@ class APIController extends Controller
                 'created_at' => Date('Y-m-d H:i:s'),
                 'updated_at' => Date('Y-m-d H:i:s')
             ];
-
         }
 
 
@@ -884,7 +850,7 @@ class APIController extends Controller
         ]);
 
         if ($result) {
-            return ['status' => 'success' , 'data' => $order];
+            return ['status' => 'success', 'data' => $order];
         } else {
             return ['status' => 'error'];
         }
@@ -902,7 +868,6 @@ class APIController extends Controller
         } else {
             return ['status' => 'error', 'data' => []];
         }
-
     }
 
     public function api_set_client_address(Request $request)
@@ -953,11 +918,10 @@ class APIController extends Controller
         }
 
         if ($result) {
-            return ['status' => 'success' , 'data' => $address_];
+            return ['status' => 'success', 'data' => $address_];
         } else {
             return ['status' => 'error'];
         }
-
     }
 
     public function api_get_delivery_setting()
@@ -970,7 +934,6 @@ class APIController extends Controller
         } else {
             return ['status' => 'error'];
         }
-
     }
 
     public function api_get_order_statuses($order)
@@ -983,7 +946,6 @@ class APIController extends Controller
         } else {
             return ['status' => 'error'];
         }
-
     }
 
     public function api_set_client_phone(Request $request)
@@ -1003,7 +965,6 @@ class APIController extends Controller
         } else {
             return ['status' => 'error'];
         }
-
     }
 
     public function api_set_client_token(Request $request)
@@ -1022,7 +983,6 @@ class APIController extends Controller
         } else {
             return ['status' => 'error'];
         }
-
     }
 
     public function api_change_client_password(Request $request)
@@ -1048,10 +1008,10 @@ class APIController extends Controller
         } else {
             return ['status' => 'error'];
         }
-
     }
 
-    public function api_refund_order(Request $request){
+    public function api_refund_order(Request $request)
+    {
 
         $order_id = $request->order_id;
         $client_id = $request->client_id;
@@ -1064,13 +1024,13 @@ class APIController extends Controller
         ]);
         $order = Order::whereId($order_id)->first();
         $order->update([
-           'status_id' => 10
+            'status_id' => 10
         ]);
         OrderHasStatus::create([
-                'order_id' => $order_id,
-                'status_id' => 10,
-                'client_id' => $client_id,
-                'user_id' => 1
+            'order_id' => $order_id,
+            'status_id' => 10,
+            'client_id' => $client_id,
+            'user_id' => 1
         ]);
 
         if ($result) {
@@ -1078,56 +1038,56 @@ class APIController extends Controller
         } else {
             return ['status' => 'error'];
         }
-
     }
 
-    public function api_get_stores_types(){
+    public function api_get_stores_types()
+    {
 
 
-       $stores_types = StoreType::all();
+        $stores_types = StoreType::all();
         if (count($stores_types)) {
-            return ['status' => 'success' , 'data' => [$stores_types]];
+            return ['status' => 'success', 'data' => [$stores_types]];
         } else {
             return ['status' => 'error', 'data' => []];
         }
-
     }
 
-    public function api_get_product_variants($product_id){
+    public function api_get_product_variants($product_id)
+    {
 
 
-        $variants = Variant::where('product_id',$product_id)->get();
+        $variants = Variant::where('product_id', $product_id)->get();
         if (count($variants)) {
-            return ['status' => 'success' , 'data' => [$variants]];
+            return ['status' => 'success', 'data' => [$variants]];
         } else {
             return ['status' => 'error', 'data' => []];
         }
-
     }
 
-    public function api_get_client_orders($client_id){
+    public function api_get_client_orders($client_id)
+    {
 
 
-        $orders = Order::where('client_id',$client_id)->get();
+        $orders = Order::where('client_id', $client_id)->get();
 
-        foreach ($orders as $order){
+        foreach ($orders as $order) {
 
             $current_status = Status::whereId($order->status_id)->first();
             $order->current_status = $current_status->name;
-            $statuses_arr = OrderHasStatus::select('status_id','created_at')->where('order_id', $order->id)->get();
+            $statuses_arr = OrderHasStatus::select('status_id', 'created_at')->where('order_id', $order->id)->get();
             $order->statuses = $statuses_arr;
             $order->store = Store::whereId($order->store_id)->first();
             $products_arr = $order->products;
             $products = array();
-            foreach ($products_arr as $product){
+            foreach ($products_arr as $product) {
                 $p = array();
                 $res = OrderHasProduct::whereProductId($product->id)->whereOrderId($order->id)->first();
                 $p['id'] = $product->id;
                 $p['name'] = $product->name;
                 $p['image'] = $product->image;
-                if($product->has_variants == 0){
+                if ($product->has_variants == 0) {
                     $p['price'] = $product->price;
-                }else{
+                } else {
                     $variant_id = $res->variant_id;
                     $variant = Variant::whereId($variant_id)->first();
                     $p['price'] = $variant->price;
@@ -1140,23 +1100,21 @@ class APIController extends Controller
             $order->products_ = $products;
         }
         if (count($orders)) {
-            return ['status' => 'success' , 'data' => [$orders]];
+            return ['status' => 'success', 'data' => [$orders]];
         } else {
             return ['status' => 'error', 'data' => []];
         }
-
     }
 
-    public function api_check_client_email(Request $request){
+    public function api_check_client_email(Request $request)
+    {
 
 
         $check = Client::whereEmail($request->email)->first();
         if ($check) {
-            return ['status' => 'success' ];
+            return ['status' => 'success'];
         } else {
             return ['status' => 'error'];
         }
-
     }
-
 }

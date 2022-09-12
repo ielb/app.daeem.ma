@@ -1,0 +1,68 @@
+APP_NAME=Daeem
+description = test
+facebook_link=facebook
+instagram_link = test
+playstore = test
+appstore = test
+maps_api_key = test
+site_logo = daeem_blue.png
+icon = favicon.png
+COLLECTION_PRICE=0.5
+COLLECTION_PRODUCT_PRICE=3
+avatar = avatar_client.png
+color_head=153a60
+APP_EMAIL=TryDaeem@contact.com
+APP_ENV=local
+APP_KEY=base64:24DpKGUnoXVZUxWHpkryV1bqnUAjsGmd2y1rlumQh10=
+APP_DEBUG=true
+DRIVER_MOTORCYCLE_PRICE=5
+DRIVER_CAR_PRICE=7
+APP_URL=https://app.serveni.ma
+true
+LOG_CHANNEL=stack
+LOG_LEVEL=debug
+DATETIME_DISPLAY_FORMAT="d M Y h:i A"
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ielbdev_daeem
+DB_USERNAME=ielbdev_daeem
+DB_PASSWORD=9=l})AcXoRz{
+BROADCAST_DRIVER=log
+CACHE_DRIVER=file
+FILESYSTEM_DRIVER=local
+QUEUE_CONNECTION=sync
+SESSION_DRIVER=file
+SESSION_LIFETIME=300
+
+MEMCACHED_HOST=127.0.0.1
+
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=trydaeem@gmail.com
+MAIL_PASSWORD=y@ssine0629
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=trydaeem@gmail.com
+MAIL_FROM_NAME="${APP_NAME}"
+REPLY_TO=trydaeem@gmail.com
+CC=trydaeem@gmail.com
+
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
+AWS_USE_PATH_STYLE_ENDPOINT=false
+
+PUSHER_APP_ID=
+PUSHER_APP_KEY=
+PUSHER_APP_SECRET=
+PUSHER_APP_CLUSTER=mt1
+
+MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"

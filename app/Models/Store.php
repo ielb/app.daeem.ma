@@ -37,6 +37,7 @@ class Store extends Model
         'use_fake_rating',
         'status',
         'recovery_token',
+        'user_id',
     ];
 
     public function storetype()
@@ -44,41 +45,39 @@ class Store extends Model
         return $this->belongsTo(StoreType::class);
     }
 
-    public function city(){
+    public function city()
+    {
 
         return $this->belongsTo(City::class);
-
     }
 
-    public function hours(){
+    public function hours()
+    {
 
         return $this->hasOne(Hour::class);
-
     }
 
-    public function ratings(){
+    public function ratings()
+    {
 
         return $this->hasMany(Rating::class);
-
     }
 
-    public function orders(){
+    public function orders()
+    {
 
         return $this->hasOne(Order::class);
-
     }
 
-    public function categories(){
+    public function categories()
+    {
 
         return $this->hasMany(Category::class);
-
     }
 
-    public function products(){
+    public function products()
+    {
 
         return $this->hasMany(Product::class);
     }
-
-
-
 }

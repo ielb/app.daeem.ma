@@ -16,7 +16,7 @@ class CreateDriverShiftsTable extends Migration
         Schema::create('driver_shifts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('shift_id')->constrained()->onDelete('cascade');
-            $table->foreignId('shift_options_id')->constrained()->onDelete('cascade');
+            $table->foreignId('shift_options_id');
             $table->foreignId('zone_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('day_id')->constrained()->onDelete('cascade');
